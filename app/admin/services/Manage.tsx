@@ -195,7 +195,8 @@ const Manage = ({ services, drivers }: any) => {
               disabled={
                 params.row.deliverystatus === "approved" || 
                 params.row.status === "confirmed" || 
-                params.row.status === "cancelled"
+                params.row.status === "cancelled" ||
+                params.row.drivercontact
               }
               onClick={() => assignDriver(params.row.id, selectedDrivers[params.row.id])}
             >
