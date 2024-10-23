@@ -48,7 +48,7 @@ model Service {
   state               String
   district            String
   driverid            String?
-  deliverystatus      String?
+  deliverystatus      String? @default("pending")
   drivername          String?
   drivercontact       String?
   drivervehicle       String?

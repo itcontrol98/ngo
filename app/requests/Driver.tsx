@@ -34,7 +34,7 @@ const Deliver = ({ services, drivers }: any) => {
         district: order.district,
         postalCode: order.postalCode,
         message: order.message,
-        status: order.deliverystatus,
+        deliverystatus: order.deliverystatus,
       };
     });
   }
@@ -55,14 +55,14 @@ const Deliver = ({ services, drivers }: any) => {
       renderCell: (params) => {
         return (
           <div className="text-secondary fw-light">
-            {params.row.status === "approved" ? (
+            {params.row.deliverystatus === "approved" ? (
               <Status
                 icon={MdDone}
                 bg="bg-success"
                 color="text-white"
                 text="approved"
               />
-            ) : params.row.status === "rejected" ? (
+            ) : params.row.deliverystatus === "rejected" ? (
               <Status
                 icon={MdClose}
                 bg="bg-danger"
@@ -115,7 +115,7 @@ const Deliver = ({ services, drivers }: any) => {
   // Approved Order
   const handleApprove = useCallback((id: string) => {
     axios
-      .put("/api/status", {
+      .put("/api/deliveryboy", {
         id,
         deliverystatus: "approved",
       })
@@ -130,7 +130,7 @@ const Deliver = ({ services, drivers }: any) => {
   // Reject Order
   const handleReject = useCallback((id: string) => {
     axios
-      .put("/api/status", {
+      .put("/api/deliveryboy", {
         id,
         deliverystatus: "rejected",
       })
