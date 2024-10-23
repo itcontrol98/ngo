@@ -195,7 +195,7 @@ const Manage = ({ services, drivers }: any) => {
                 params.row.deliverystatus === "approved" || 
                 params.row.status === "confirmed" || 
                 params.row.status === "cancelled" || 
-                !params.row.drivername
+                params.row.drivername
               }
               
               onClick={() => {
