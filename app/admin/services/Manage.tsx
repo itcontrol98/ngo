@@ -87,8 +87,7 @@ const Manage = ({ services, drivers }: any) => {
               disabled={
                 params.row.deliverystatus === "approved" || 
                 params.row.status === "confirmed" || 
-                params.row.status === "cancelled" ||
-                params.row.drivername
+                params.row.status === "cancelled"
               }
               MenuProps={{
                 PaperProps: {
@@ -196,8 +195,7 @@ const Manage = ({ services, drivers }: any) => {
               disabled={
                 params.row.deliverystatus === "approved" || 
                 params.row.status === "confirmed" || 
-                params.row.status === "cancelled" ||
-                params.row.drivername
+                params.row.status === "cancelled"
               }
               onClick={() => assignDriver(params.row.id, selectedDrivers[params.row.id])}
             >
@@ -207,7 +205,39 @@ const Manage = ({ services, drivers }: any) => {
         );
       },
     },
+    {
+      field: "action",
+      headerName: "Action",
+      width: 160,
+      renderCell: (params) => {
+        const isCancelled = params.row.status === "cancelled" || params.row.status === "confirmed";
+        return (
+          <div className="d-flex justify-content-between w-100">
+            {!isCancelled && (
+              <>
+                <ActionBtn
+                  icon={MdDone}
+                  onClick={() => {
+                    handleConfirmed(params.row.id);
+                  }}
+                />
+              </>
+            )}
+            {!isCancelled && (
+              <ActionBtn
+                icon={MdCancel}
+                onClick={() => {
+                  handleCancel(params.row.id);
+                }}
+              />
+            )}
+          </div>
+        );
+      },
+    },
   ];
+
+
 
   const assignDriver = useCallback((id: any, driver: string) => {
     const filteredDrivers = drivers.filter((item: any) => item.user.id === driver);
@@ -217,6 +247,7 @@ const Manage = ({ services, drivers }: any) => {
       axios
         .put("/api/assign", {
           id,
+          deliverystatus: "pending",
           drivername: selectedDriver.user.name,
           drivercontact: selectedDriver.user.contact,
           drivervehicle: selectedDriver.vehicletype,
@@ -235,6 +266,40 @@ const Manage = ({ services, drivers }: any) => {
       toast.error("Driver not found");
     }
   }, [drivers, router]);
+
+  // Deliver product by admin
+  const handleConfirmed = useCallback((id: string) => {
+    axios
+      .put("/api/status", {
+        id,
+        status: "confirmed",
+      })
+      .then((res) => {
+        toast.success("Confirmed");
+        router.refresh();
+      })
+      .catch((err) => {
+        toast.error("Oops! something went wrong");
+      });
+  }, []);
+
+  // Cancel Order
+  const handleCancel = useCallback((id: string) => {
+    axios
+      .put("/api/status", {
+        id,
+        status: "cancelled",
+      })
+      .then((res) => {
+        toast.success("Cancelled");
+        router.refresh();
+      })
+      .catch((err) => {
+        toast.error("Oops! something went wrong");
+      });
+  }, []);
+
+
 
   return (
     <div style={{ width: "100%" }} className="my-4">

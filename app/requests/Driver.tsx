@@ -19,7 +19,7 @@ import React from "react";
 
 const Deliver = ({ services, drivers }: any) => {
   const filterData = services.filter((item: any) => item.driverid === drivers);
-  console.log(filterData)
+  console.log(filterData);
   const router = useRouter();
   let rows: any = [];
   if (filterData) {
@@ -86,12 +86,14 @@ const Deliver = ({ services, drivers }: any) => {
       headerName: "Action",
       width: 150,
       renderCell: (params) => {
-        const isCancelled = params.row.deliverystatus === "rejected" || params.row.deliverystatus === "approved"
+        const isCancelled =
+          params.row.deliverystatus === "rejected" ||
+          params.row.deliverystatus === "approved";
         return (
           <div className="d-flex justify-content-between w-100">
             {!isCancelled && (
               <>
-              <ActionBtn
+                <ActionBtn
                   icon={MdDone}
                   onClick={() => {
                     handleApprove(params.row.id);
@@ -103,7 +105,6 @@ const Deliver = ({ services, drivers }: any) => {
                     handleReject(params.row.id);
                   }}
                 />
-                
               </>
             )}
           </div>
@@ -133,6 +134,11 @@ const Deliver = ({ services, drivers }: any) => {
       .put("/api/deliveryboy", {
         id,
         deliverystatus: "rejected",
+        driverid: null,
+        drivername: null,
+        drivercontact: null,
+        drivervehicle: null,
+        drivervehiclenumber: null,
       })
       .then((res) => {
         toast.success("Rejected");
