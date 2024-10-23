@@ -1,6 +1,6 @@
 import { db } from '@/app/libs/db';
 
-export default async function getDriver() {
+export default async function getService() {
     try {
         const services = await db.service.findMany(
             {

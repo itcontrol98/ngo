@@ -18,7 +18,8 @@ import moment from "moment";
 import React from "react";
 
 const Deliver = ({ services, drivers }: any) => {
-  const filterData = services.filter((item: any) => item.userId === drivers);
+  const filterData = services.filter((item: any) => item.driverid === drivers);
+  console.log(filterData)
   const router = useRouter();
   let rows: any = [];
   if (filterData) {

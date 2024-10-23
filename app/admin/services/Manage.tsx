@@ -241,6 +241,7 @@ const Manage = ({ services, drivers }: any) => {
           drivercontact: selectedDriver.user.contact,
           drivervehicle: selectedDriver.vehicletype,
           drivervehiclenumber: selectedDriver.vehiclenumber,
+          driverid: driver,
         })
         .then((res) => {
           toast.success("Assigned");
