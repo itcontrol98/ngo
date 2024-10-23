@@ -88,12 +88,12 @@ const AddressForm = ({ id, referral }: any) => {
       toast.success("Request Sent");
       router.push('/');
     } else if (response.status === 400 || response.status === 400 || response.status === 404 || response.status === 411|| response.status === 409 || response.status === 410){
-      const errorMessage = responseData.message || "An unexpected error occurred.";
+      const errorMessage = responseData.message || "Please Login First.";
       toast.error(errorMessage);
       router.push('/login')
      }
       else {
-        const errorMessage = responseData.message || "An unexpected error occurred.";
+        const errorMessage = responseData.message || "Please Login First.";
         toast.error(errorMessage);
         router.push('/login')
       }}

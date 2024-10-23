@@ -25,8 +25,17 @@ import moment from "moment";
 import React from "react";
 
 const Manage = ({ services, drivers }: any) => {
-  const [driver, setDriver] = useState("");
   const router = useRouter();
+
+  const [selectedDrivers, setSelectedDrivers] = useState<{ [key: string]: string }>({});
+
+  const handleDriverChange = (id: string, driverId: string) => {
+    setSelectedDrivers((prev) => ({
+      ...prev,
+      [id]: driverId,
+    }));
+  };
+
   let rows: any = [];
   if (services) {
     rows = services.map((order: any) => {
@@ -45,23 +54,10 @@ const Manage = ({ services, drivers }: any) => {
         drivercontact: order.drivercontact,
         drivervehiclenumber: order.drivervehiclenumber,
         deliverystatus: order.deliverystatus,
+        driver: order.driver, // Add driver if available
       };
     });
   }
-
-  console.log(driver)
-  const handleDelete = useCallback(async (id: string) => {
-    axios
-      .delete(`/api/service/${id}`)
-      .then((res) => {
-        toast.success("Service Deleted");
-        router.refresh();
-      })
-      .catch((err) => {
-        toast.error("Failed to delete Service");
-        console.log(err);
-      });
-  }, []);
 
   const columns: GridColDef[] = [
     { field: "name", headerName: "Customer Name", width: 150 },
@@ -71,21 +67,29 @@ const Manage = ({ services, drivers }: any) => {
     { field: "district", headerName: "District", width: 170 },
     { field: "state", headerName: "State", width: 170 },
     { field: "message", headerName: "Message", width: 170 },
-    { field: "drivername", headerName: "Drivery Name", width: 170 },
-    { field: "drivercontact", headerName: "Drivery Contact", width: 170 },
-    { field: "drivervehiclenumber", headerName: "Drivery Vehicle Number", width: 170 },
+    { field: "drivername", headerName: "Driver Name", width: 170 },
+    { field: "drivercontact", headerName: "Driver Contact", width: 170 },
+    { field: "drivervehiclenumber", headerName: "Driver Vehicle Number", width: 170 },
     {
       field: "drivers",
       headerName: "Drivers",
       width: 170,
       renderCell: (params) => {
+        const driver = selectedDrivers[params.row.id] || params.row.driver || "";
+
         return (
           <FormControl size="small" className="w-75 mt-1">
             <InputLabel size="small">Driver</InputLabel>
             <Select
               value={driver}
-              onChange={(event) => setDriver(event.target.value)}
+              onChange={(event) => handleDriverChange(params.row.id, event.target.value)}
               size="small"
+              disabled={
+                params.row.deliverystatus === "approved" || 
+                params.row.status === "confirmed" || 
+                params.row.status === "cancelled" ||
+                params.row.drivername
+              }
               MenuProps={{
                 PaperProps: {
                   style: {
@@ -105,7 +109,6 @@ const Manage = ({ services, drivers }: any) => {
         );
       },
     },
-
     {
       field: "status",
       headerName: "Service Status",
@@ -146,7 +149,6 @@ const Manage = ({ services, drivers }: any) => {
         );
       },
     },
-
     { field: "date", headerName: "Date", width: 130 },
     {
       field: "deliverystatus",
@@ -194,14 +196,10 @@ const Manage = ({ services, drivers }: any) => {
               disabled={
                 params.row.deliverystatus === "approved" || 
                 params.row.status === "confirmed" || 
-                params.row.status === "cancelled" || 
-                params.row.deliverystatus === "rejected" ||
+                params.row.status === "cancelled" ||
                 params.row.drivername
               }
-              
-              onClick={() => {
-                assignDriver(params.row.id, driver);
-              }}
+              onClick={() => assignDriver(params.row.id, selectedDrivers[params.row.id])}
             >
               Assign
             </Button>
@@ -209,70 +207,10 @@ const Manage = ({ services, drivers }: any) => {
         );
       },
     },
-    // {
-    //   field: "delete",
-    //   headerName: "Delete Service",
-    //   width: 120,
-    //   renderCell: (params) => {
-    //     return (
-    //       <div className="d-flex w-100">
-    //         <ActionBtn
-    //           icon={MdCancel}
-    //           onClick={() => {
-    //             handleDelete(params.row.id);
-    //           }}
-    //         />
-    //       </div>
-    //     );
-    //   },
-    // },
-    {
-      field: "action",
-      headerName: "Action",
-      width: 160,
-      renderCell: (params) => {
-        const isCancelled = params.row.status === "cancelled";
-        return (
-          <div className="d-flex justify-content-between w-100">
-            {!isCancelled && (
-              <>
-                {/* <ActionBtn
-                  icon={MdDeliveryDining}
-                  onClick={() => {
-                    handleResolved(params.row.id);
-                  }}
-                /> */}
-
-                <ActionBtn
-                  icon={MdDone}
-                  onClick={() => {
-                    handleConfirmed(params.row.id);
-                  }}
-                />
-              </>
-            )}
-            {/* <ActionBtn
-              icon={MdRemoveRedEye}
-              onClick={() => {
-                router.push(`/service/${params.row.id}`);
-              }}
-            /> */}
-            {!isCancelled && (
-              <ActionBtn
-                icon={MdCancel}
-                onClick={() => {
-                  handleCancel(params.row.id);
-                }}
-              />
-            )}
-          </div>
-        );
-      },
-    },
   ];
 
   const assignDriver = useCallback((id: any, driver: string) => {
-    const filteredDrivers = drivers.filter((item: any) => item.userId === driver);
+    const filteredDrivers = drivers.filter((item: any) => item.user.id === driver);
     if (filteredDrivers.length > 0) {
       const selectedDriver = filteredDrivers[0];
       
@@ -297,54 +235,6 @@ const Manage = ({ services, drivers }: any) => {
       toast.error("Driver not found");
     }
   }, [drivers, router]);
-
-  // Manage Dispatch Update
-  // const handleResolved = useCallback((id: string) => {
-  //   axios
-  //     .put("/api/status", {
-  //       id,
-  //       status: "resolved",
-  //     })
-  //     .then((res) => {
-  //       toast.success("Resolved");
-  //       router.refresh();
-  //     })
-  //     .catch((err) => {
-  //       toast.error("Oops! something went wrong");
-  //     });
-  // }, []);
-
-  // Deliver product by admin
-  const handleConfirmed = useCallback((id: string) => {
-    axios
-      .put("/api/status", {
-        id,
-        status: "confirmed",
-      })
-      .then((res) => {
-        toast.success("Confirmed");
-        router.refresh();
-      })
-      .catch((err) => {
-        toast.error("Oops! something went wrong");
-      });
-  }, []);
-
-  // Cancel Order
-  const handleCancel = useCallback((id: string) => {
-    axios
-      .put("/api/status", {
-        id,
-        status: "cancelled",
-      })
-      .then((res) => {
-        toast.success("Cancelled");
-        router.refresh();
-      })
-      .catch((err) => {
-        toast.error("Oops! something went wrong");
-      });
-  }, []);
 
   return (
     <div style={{ width: "100%" }} className="my-4">
