@@ -48,6 +48,7 @@ model Service {
   state               String
   district            String
   driverid            String?
+  deliverystatus      String?
   drivername          String?
   drivercontact       String?
   drivervehicle       String?

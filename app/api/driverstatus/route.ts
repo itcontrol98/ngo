@@ -3,10 +3,10 @@ import { NextResponse } from 'next/server'
 
 export async function PUT(request: Request) {
     const body = await request.json()
-    const { id,status } = body
+    const { id,status,deliverystatus } = body
     const order = await db.driver.update({
         where: { id: id },
-        data: {status }
+        data: {status,deliverystatus }
     })
     return NextResponse.json(order)
 }

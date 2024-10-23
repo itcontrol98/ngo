@@ -44,6 +44,7 @@ const Manage = ({ services, drivers }: any) => {
         drivername: order.drivername,
         drivercontact: order.drivercontact,
         drivervehiclenumber: order.drivervehiclenumber,
+        deliverystatus: order.deliverystatus,
       };
     });
   }
@@ -148,6 +149,39 @@ const Manage = ({ services, drivers }: any) => {
 
     { field: "date", headerName: "Date", width: 130 },
     {
+      field: "deliverystatus",
+      headerName: "Delivery Boy Status",
+      width: 180,
+      renderCell: (params) => {
+        return (
+          <div className="text-secondary fw-light">
+            {params.row.deliverystatus === "approved" ? (
+              <Status
+                icon={MdDone}
+                bg="bg-success"
+                color="text-white"
+                text="approved"
+              />
+            ) : params.row.deliverystatus === "rejected" ? (
+              <Status
+                icon={MdClose}
+                bg="bg-danger"
+                color="text-white"
+                text="rejected"
+              />
+            ) : (
+              <Status
+                icon={MdClose}
+                bg="bg-secondary"
+                color="text-white"
+                text="pending"
+              />
+            )}
+          </div>
+        );
+      },
+    },
+    {
       field: "assign",
       headerName: "Assign",
       width: 200,
@@ -157,6 +191,13 @@ const Manage = ({ services, drivers }: any) => {
             <Button
               color="primary"
               variant="contained"
+              disabled={
+                params.row.deliverystatus === "approved" || 
+                params.row.status === "confirmed" || 
+                params.row.status === "cancelled" || 
+                !params.row.drivername
+              }
+              
               onClick={() => {
                 assignDriver(params.row.id, driver);
               }}
@@ -187,19 +228,19 @@ const Manage = ({ services, drivers }: any) => {
     {
       field: "action",
       headerName: "Action",
-      width: 200,
+      width: 160,
       renderCell: (params) => {
         const isCancelled = params.row.status === "cancelled";
         return (
           <div className="d-flex justify-content-between w-100">
             {!isCancelled && (
               <>
-                <ActionBtn
+                {/* <ActionBtn
                   icon={MdDeliveryDining}
                   onClick={() => {
                     handleResolved(params.row.id);
                   }}
-                />
+                /> */}
 
                 <ActionBtn
                   icon={MdDone}
@@ -257,20 +298,20 @@ const Manage = ({ services, drivers }: any) => {
   }, [drivers, router]);
 
   // Manage Dispatch Update
-  const handleResolved = useCallback((id: string) => {
-    axios
-      .put("/api/status", {
-        id,
-        status: "resolved",
-      })
-      .then((res) => {
-        toast.success("Resolved");
-        router.refresh();
-      })
-      .catch((err) => {
-        toast.error("Oops! something went wrong");
-      });
-  }, []);
+  // const handleResolved = useCallback((id: string) => {
+  //   axios
+  //     .put("/api/status", {
+  //       id,
+  //       status: "resolved",
+  //     })
+  //     .then((res) => {
+  //       toast.success("Resolved");
+  //       router.refresh();
+  //     })
+  //     .catch((err) => {
+  //       toast.error("Oops! something went wrong");
+  //     });
+  // }, []);
 
   // Deliver product by admin
   const handleConfirmed = useCallback((id: string) => {
@@ -280,7 +321,7 @@ const Manage = ({ services, drivers }: any) => {
         status: "confirmed",
       })
       .then((res) => {
-        toast.success("Delivered");
+        toast.success("Confirmed");
         router.refresh();
       })
       .catch((err) => {

@@ -34,7 +34,7 @@ const Deliver = ({ services, drivers }: any) => {
         district: order.district,
         postalCode: order.postalCode,
         message: order.message,
-        status: order.status,
+        status: order.deliverystatus,
       };
     });
   }
@@ -117,7 +117,7 @@ const Deliver = ({ services, drivers }: any) => {
     axios
       .put("/api/status", {
         id,
-        status: "approved",
+        deliverystatus: "approved",
       })
       .then((res) => {
         toast.success("Approved");
@@ -132,7 +132,7 @@ const Deliver = ({ services, drivers }: any) => {
     axios
       .put("/api/status", {
         id,
-        status: "rejected",
+        deliverystatus: "rejected",
       })
       .then((res) => {
         toast.success("Rejected");
