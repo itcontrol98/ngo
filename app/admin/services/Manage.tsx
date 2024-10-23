@@ -191,12 +191,13 @@ const Manage = ({ services, drivers }: any) => {
             <Button
               color="primary"
               variant="contained"
-              // disabled={
-              //   params.row.deliverystatus === "approved" || 
-              //   params.row.status === "confirmed" || 
-              //   params.row.status === "cancelled" || 
-              //   params.row.drivername
-              // }
+              disabled={
+                params.row.deliverystatus === "approved" || 
+                params.row.status === "confirmed" || 
+                params.row.status === "cancelled" || 
+                params.row.deliverystatus === "rejected" ||
+                params.row.drivername
+              }
               
               onClick={() => {
                 assignDriver(params.row.id, driver);

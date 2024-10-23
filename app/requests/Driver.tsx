@@ -86,7 +86,7 @@ const Deliver = ({ services, drivers }: any) => {
       headerName: "Action",
       width: 150,
       renderCell: (params) => {
-        const isCancelled = params.row.status === "rejected";
+        const isCancelled = params.row.deliverystatus === "rejected" || params.row.deliverystatus === "approved"
         return (
           <div className="d-flex justify-content-between w-100">
             {!isCancelled && (

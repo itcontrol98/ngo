@@ -107,7 +107,7 @@ const filterData = services.filter((item:any)=>item.userId === drivers)
       headerName: "Cancel",
       width: 200,
       renderCell: (params) => {
-        const isCancelled = params.row.status === "cancelled";
+        const isCancelled = params.row.status === "cancelled" || params.row.status === "confirmed";
         return (
           <div className="d-flex justify-content-between w-100">
             {!isCancelled && (
