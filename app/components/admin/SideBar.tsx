@@ -81,7 +81,7 @@ const Sidebar = ({ role }:any) => {
       </button>
 
       <div
-        className={`fixed inset-0 z-50 transition-opacity ${isOpen ? "opacity-100" : "opacity-0 pointer-events-none"} bg-black`}
+        className={`fixed inset-0 z-50 transition-opacity ${isOpen ? "opacity-100" : "opacity-0 pointer-events-none"} bg-white`}
         onClick={handleCloseSidebar}
       >
         <div
@@ -89,7 +89,7 @@ const Sidebar = ({ role }:any) => {
           style={{ marginTop: "120px", overflowY: "auto" }} // Add overflowY for sidebar scrolling
         >
           <div
-            className="mt-4  bg-black max-h-[calc(100vh-120px)] overflow-y-auto"
+            className="mt-4  bg-white max-h-[calc(100vh-120px)] overflow-y-auto"
             style={{ scrollbarWidth: "thin", scrollbarColor: "gray transparent" }}
           >
             {filteredMenuItems.map((item) => (

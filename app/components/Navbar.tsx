@@ -52,11 +52,9 @@ const NavbarData: React.FC<NavbarProps> = ({ id, email, name, role, drivers }) =
                   Admin
                 </Nav.Link>
               )}
-              {role === "USER" && (
                 <Nav.Link href="/service" onClick={closeNavbar} style={{ textDecoration: "none", fontSize: "15px" }}>
                   Service
                 </Nav.Link>
-              )}
               {role === "DRIVER" && filtered.length === 0 && (
                 <Nav.Link href="/driver" onClick={closeNavbar} className="ms-2 ps-1" style={{ textDecoration: "none", fontSize: "15px" }}>
                  Add Driver
