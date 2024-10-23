@@ -6,7 +6,7 @@ export async function POST(request: Request) {
     const { message, line1, line2, state,district,postalCode } = await request.json();
     const currentUser = await getCurrentUser();
     if (!currentUser) {
-      return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: "Please Login!" }, { status: 401 });
     }
     if (!message || !district || !line1  || !state  || !postalCode) {
       return NextResponse.json(

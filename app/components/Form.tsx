@@ -87,17 +87,19 @@ const AddressForm = ({ id, referral }: any) => {
     if (response.ok) {
       toast.success("Request Sent");
       router.push('/');
-    } else if (response.status === 400 || response.status === 404 || response.status === 411|| response.status === 409 || response.status === 410){
+    } else if (response.status === 400 || response.status === 400 || response.status === 404 || response.status === 411|| response.status === 409 || response.status === 410){
       const errorMessage = responseData.message || "An unexpected error occurred.";
       toast.error(errorMessage);
+      router.push('/login')
      }
       else {
         const errorMessage = responseData.message || "An unexpected error occurred.";
         toast.error(errorMessage);
+        router.push('/login')
       }}
       catch (error) {
         console.error("Error:", error);
-        toast.error("Failed to add customer. Please try again later.");
+        toast.error("Please try again later.");
       }finally {
         setLoading(false);
       }
