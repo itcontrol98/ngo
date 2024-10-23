@@ -71,23 +71,14 @@ const DropdownMenu: React.FC<NavbarProps> = ({ email, name,closeNavbar }) => {
           {email ? (
             <div className="py-1" role="none">
               <Link
-                href="/orders"
+                href="/requests"
                 onClick={closeDropdown}
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                 role="menuitem"
               >
-                Check Orders
+                Check Request
               </Link>
               <hr className="my-1" />
-              <Link
-                href="/booking"
-                onClick={closeDropdown}
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                role="menuitem"
-              >
-                Appointments
-              </Link>
-              <hr className="my-1"/>
               <a
                 onClick={handleLogout}
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
