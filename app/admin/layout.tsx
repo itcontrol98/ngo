@@ -4,8 +4,8 @@ import Sidebar from "@/app/components/admin/SideBar";
 import { getCurrentUser } from "@/actions/getCurrentUser";
 
 export const metadata = {
-  title: "Bhutatav Admin",
-  description: "Admin Dashboard",
+  title: "Garbage Admin",
+  description: "Garbage Admin Dashboard",
 };
 
 const AdminLayout = async({ children }: { children: React.ReactNode }) => {
