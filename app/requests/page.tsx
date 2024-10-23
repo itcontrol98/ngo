@@ -18,9 +18,10 @@ const Requests = async () => {
             <>
                 <Container>
                     <Row>
+                    {currentUser.role !== 'DRIVER' ? (
                             <Col xs={12}>
                                 <Manage services={services} drivers={currentUser.id} />
-                            </Col>
+                            </Col> ) : null}
 
                         {currentUser.role === 'DRIVER' ? (
                             <Col xs={12}>
