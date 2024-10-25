@@ -26,10 +26,10 @@ interface ShowUserProps {
 const ShowUser:React.FC<ShowUserProps> = ({users}) => {
   const router = useRouter();
 
-
+  const filterUser = users.filter((data) => data.role !== "SUPERADMIN");
   let rows: any = [];
-  if (users) {
-    rows = users.map((user) => {
+  if (filterUser) {
+    rows = filterUser.map((user) => {
       return {
         id: user.id,
         name: user.name,
